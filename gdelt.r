@@ -24,19 +24,19 @@ require("xts")
 # - Root Events Only: consider only headline of news article
 # - ActionGeo Countries: Iran, Iraq, Kuwait, Oman, Qatar, Saudi Arabia, Syria and United Arab Emirates
 # - Get all event codes for now. We will filter at a later stage
-gdelt_filter <- list(
-  IsRootEvent=1,
-  ActionGeo_CountryCode=c("IR", "IQ", "KW", "OM", "QA", "SA", "SY", "AE"))
+# gdelt_filter <- list(
+#   IsRootEvent=1,
+#   ActionGeo_CountryCode=c("IR", "IQ", "KW", "OM", "QA", "SA", "SY", "AE"))
 
 # Download (or load zip if existent)
-gdelt <- GetGDELT(
-  start.date="2000-01-01",
-  end.date="2000-12-31",
-  filter=gdelt_filter,
-  local.folder="./data/gdelt/")
+# gdelt <- GetGDELT(
+#   start.date="2000-01-01",
+#   end.date="2000-12-31",
+#   filter=gdelt_filter,
+#   local.folder="./data/gdelt/")
 
 # Save pre-filtered GDELT database
-saveRDS(gdelt, "gdelt_2000.rds")
+# saveRDS(gdelt, "gdelt_2000.rds")
 
 # Load pre-filtered GDELT database
 gdelt <- readRDS("./data/gdelt_2000.rds")
