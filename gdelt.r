@@ -1,125 +1,120 @@
+#
+# CA683 - Assignment 2 - Main script
+#
 
-#install.packages("GDELTtools")
-library("GDELTtools")
-library("tseries")
-library("xts")
+# Packages Used
+# install.packages("GDELTtools")
+# install.packages("xts")
+require("GDELTtools")
+require("xts")
 
-#test.filter <- list(Actor1KnownGroupCode="OPC", EventBaseCode="101, 08, 18, 19, 20, 08, 14, 15, 17")
-#test.results <- GetGDELT(start.date="2000-01-01", end.date="2013-12-31", filter=test.filter, local.folder="../datasets/", allow.wildcards = FALSE, use.regex = TRUE, data.url.root = "http://data.gdeltproject.org/events/", verbose = TRUE)
+# ##########################################################################
+# 1. Download GDELT data
+#    - Use base year 2000 just for initial analysis
+#    - Download all your gdelt zip files from:
+#      http://data.gdeltproject.org/events/index.html
+#    - Place the downloaded files in the "./data/gdelt/" folder then the
+#      GetGDELT command will get the files directly from there and will not
+#      try to re-download them.
+#
+# Warning: The file 2014-03-19 is MISSING.
+# So when downloading never use a date interval containing that date.
 
-
-## Not run:
-# 1=Verbal Cooperation, 2=Material Cooperation, 3=Verbal Conflict, 4=Material Conflict.
-#EventCode=c(), EventBaseCode=c(), EventRootCode=c()
-#GoldsteinScale=-10.0, #c(seq(8.0,10.0,by=0.1),seq(-8.0,-10.0,by=-0.1)),
-filter <- list(
+# Filter:
+# - Root Events Only: consider only headline of news article
+# - ActionGeo Countries: Iran, Iraq, Kuwait, Oman, Qatar, Saudi Arabia, Syria and United Arab Emirates
+# - Get all event codes for now. We will filter at a later stage
+gdelt_filter <- list(
   IsRootEvent=1,
   ActionGeo_CountryCode=c("IR", "IQ", "KW", "OM", "QA", "SA", "SY", "AE"))
 
+# Download (or load zip if existent)
 gdelt <- GetGDELT(
   start.date="2000-01-01",
   end.date="2000-12-31",
-  filter=country_code_filter,
+  filter=gdelt_filter,
   local.folder="./data/gdelt/")
 
+# Save pre-filtered GDELT database
 saveRDS(gdelt, "gdelt_2000.rds")
 
-
-
-gdelt2 <- GetGDELT(
-  start.date="2014-03-20",
-  end.date="2016-04-01",
-  filter=country_code_filter,
-  local.folder="./data/gdelt/")
-
-saveRDS(gdelt2, "gdelt_2014.03.19_to_2016.04.01.rds")
-
-
-
-new_gdelt <- gdelt[abs(gdelt$GoldsteinScale) >= 8.0,]
-nodups_gdelt <- new_gdelt[!duplicated(new_gdelt[,c("DATEADDED", "ActionGeo_CountryCode", "EventCode", "SOURCEURL")]),]
-
-
-new_gdelt$SOURCEURL
-new_gdelt[579:580,]
-
-table(gdelt$ActionGeo_ADM1Code)
-table(gdelt$ActionGeo_CountryCode)
-summary(gdelt)
-## End(Not run)
-
-unique(substr(gdelt$ActionGeo_ADM1Code, 0, 2))
-unique(gdelt$ActionGeo_CountryCode)
-
-
-gdelt$IsRootEvent
-new_gdelt <- gdelt[abs(gdelt$GoldsteinScale) >= 8.0,]
-gdelt
-new_gdelt$GoldsteinScale
-new_gdelt
-
-
-# Download the entire post-20140319 GDELT database
-#GetGDELT(start.date = "2014/03/20", 
-#end.date = "2015/01/01", 
-#local.folder = "./Data", 
-#data.url.root = "http://data.gdeltproject.org/events/",
-#verbose = TRUE)
-
-# Option 1
-# Doesn't work well
-plot(oil_fateh, col="red")
-lines(oil_can, col="blue")
-lines(oil_henry, col="green")
-lines(oil_opec, col="yellow")
-
-# Option 2
-# Works well
-z <- na.approx(cbind(oil_fateh, oil_can, oil_henry, oil_opec))
-plot.zoo(
-  z, col=2:5,
-  ylab = c("Fateh", "Canada", "Henry Hub Gas", "Opec"),
-  main="Oil and Derivates")
-
-
-
-diesel_ny_daily <- na.trim(xts(data5$New.York.Harbor.Ultra.Low.Sulfur.No.2.Diesel.Spot.Price..Dollars.per.Gallon., as.Date(data5$Date, format="%b %d, %Y")))
-saveRDS(diesel_ny_daily, "diesel_ny_daily")
-
-diesel_us_gulf_coast_daily <- na.trim(xts(data5$U.S..Gulf.Coast.Ultra.Low.Sulfur.No.2.Diesel.Spot.Price..Dollars.per.Gallon., as.Date(data5$Date, format="%b %d, %Y")))
-saveRDS(diesel_us_gulf_coast_daily, "diesel_us_gulf_coast_daily")
-
-diesel_us_la_daily <- na.trim(xts(data5$Los.Angeles..CA.Ultra.Low.Sulfur.CARB.Diesel.Spot.Price..Dollars.per.Gallon., as.Date(data5$Date, format="%b %d, %Y")))
-saveRDS(diesel_us_la_daily, "diesel_us_la_daily")
-
-kerosene_jet_fuel_daily <- na.trim(xts(data6$U.S..Gulf.Coast.Kerosene.Type.Jet.Fuel.Spot.Price.FOB..Dollars.per.Gallon., as.Date(data6$Date, format="%b %d, %Y")))
-saveRDS(kerosene_jet_fuel_daily, "kerosene_jet_fuel_daily.rds")
-
-heating_oil_ny_daily <- na.trim(xts(data4$New.York.Harbor.No..2.Heating.Oil.Spot.Price.FOB..Dollars.per.Gallon., as.Date(data4$Date, format="%b %d, %Y")))
-saveRDS(heating_oil_ny_daily, "heating_oil_ny_daily.rds")
-
-gasoline_us_la_daily <- na.trim(xts(data3$Los.Angeles.Reformulated.RBOB.Regular.Gasoline.Spot.Price..Dollars.per.Gallon., as.Date(data3$Date, format="%b %d, %Y")))
-saveRDS(gasoline_us_la_daily, "gasoline_us_la_daily.rds")
-
-gasoline_ny_daily <- na.trim(xts(data2$New.York.Harbor.Conventional.Gasoline.Regular.Spot.Price.FOB..Dollars.per.Gallon., as.Date(data2$Date, format="%b %d, %Y")))
-saveRDS(gasoline_ny_daily, "gasoline_ny_daily.rds")
-
-gasoline_us_gulf_cost_daily <- na.trim(xts(data2$U.S..Gulf.Coast.Conventional.Gasoline.Regular.Spot.Price.FOB..Dollars.per.Gallon., as.Date(data2$Date, format="%b %d, %Y")))
-saveRDS(gasoline_us_gulf_cost_daily, "gasoline_us_gulf_cost_daily.rds")
-
-oil_wti_daily <- na.trim(xts(data1$Cushing..OK.WTI.Spot.Price.FOB..Dollars.per.Barrel., as.Date(data1$Date, format="%b %d, %Y")))
-saveRDS(oil_wti_daily, "oil_wti_daily.rds")
-oil_brent_daily <- na.trim(xts(data1$Europe.Brent.Spot.Price.FOB..Dollars.per.Barrel., as.Date(data1$Date, format="%b %d, %Y")))
-saveRDS(oil_brent_daily, "oil_brent_daily.rds")
-
-oil_wti_daily <- xts(data1$value1, as.Date(data1$Date, format="%b %d, %Y"))
-oil_brent_daily <- xts(data1$value2, as.Date(data1$Date, format="%b %d, %Y"))
-
+# Load pre-filtered GDELT database
 gdelt <- readRDS("./data/gdelt_2000.rds")
 
-#as.Date(as.character(gdelt$SQLDATE), format="%Y%m%d")
+# Add Date column for time series analysis
 gdelt$Date <- as.Date(as.character(gdelt$SQLDATE), format="%Y%m%d")
-gdelt_imp_red <- gdelt[gdelt$EventRootCode==20, c("Date", "EventCode", "GoldsteinScale", "NumMentions", "NumSources", "NumArticles", "AvgTone", "ActionGeo_CountryCode", "SOURCEURL")]
-a <- aggregate(gdelt_imp_red, by = list(gdelt_imp_red$Date), length)
-gdelt_2000_event_count <- xts(a[,2],a[,1])
-plot(gdelt_2000_event_count)
+
+# ##########################################################################
+# 2. Filter GDELT events
+# Remove duplicates
+# gdelt_nodups <- gdelt[!duplicated(gdelt[,c("DATEADDED", "ActionGeo_CountryCode", "EventCode", "SOURCEURL")]),]
+
+# Get only events with significant GoldsteinScale [-10.0,10.0]
+# gdelt_significant <- gdelt[abs(gdelt$GoldsteinScale) >= 8.0,]
+
+# Get only unconvencial violence events (mass killings, etc.)
+# And remove unused columns
+gdelt_filtered <- gdelt[
+  gdelt$EventRootCode==20,
+  c("Date", "EventCode", "GoldsteinScale", "NumMentions", "NumSources", "NumArticles", "AvgTone", "ActionGeo_CountryCode", "SOURCEURL")]
+
+# Aggregate events by date and count
+gdelt_summary.count <- aggregate(gdelt_filtered, by = list(gdelt_filtered$Date), length)
+gdelt_summary.mean <- aggregate(gdelt_filtered, by = list(gdelt_filtered$Date), mean, na.action = na.omit)
+
+# Merge all GDELT indicators into one variable
+gdelt_indicators <- cbind(
+  # Event Count
+  xts(gdelt_summary.count[,c("Date")],gdelt_summary.count[,1]),
+  # Event Means
+  xts(gdelt_summary.mean[,c("GoldsteinScale", "NumMentions", "NumArticles", "AvgTone")], gdelt_summary.mean[,1])
+)
+# Normalize Names
+names(gdelt_indicators) <- c("EventCount", "GoldsteinScale", "NumMentions", "NumArticles", "AvgTone")
+
+# Save GDELT working object
+saveRDS(gdelt_indicators, "./data/gdelt_indicators.rds")
+
+# Plot the GDELT indicators
+plot.zoo(gdelt_indicators, col=1:5,main="GDELT Indicators")
+
+# ##########################################################################
+# 3. Load Oil and Derivates data
+diesel_ny_daily <- readRDS("./data/diesel_ny_daily.rds")
+diesel_us_gulf_coast_daily <- readRDS("./data/diesel_us_gulf_coast_daily.rds")
+diesel_us_la_daily <- readRDS("./data/diesel_us_la_daily.rds")
+gasoline_ny_daily <- readRDS("./data/gasoline_ny_daily.rds")
+gasoline_us_gulf_cost_daily <- readRDS("./data/gasoline_us_gulf_cost_daily.rds")
+gasoline_us_la_daily <- readRDS("./data/gasoline_us_la_daily.rds")
+heating_oil_ny_daily <- readRDS("./data/heating_oil_ny_daily.rds")
+henry_hub_natural_gas_daily <- readRDS("./data/henry_hub_natural_gas_daily.rds")
+kerosene_jet_fuel_daily <- readRDS("./data/kerosene_jet_fuel_daily.rds")
+oil_brent_daily <- readRDS("./data/oil_brent_daily.rds")
+oil_canada_monthly <- readRDS("./data/oil_canada_monthly.rds")
+oil_fateh_monthly <- readRDS("./data/oil_fateh_monthly.rds")
+oil_opec_daily <- readRDS("./data/oil_opec_daily.rds")
+oil_wti_daily <- readRDS("./data/oil_wti_daily.rds")
+propane_mont_belvieu_daily <- readRDS("./data/propane_mont_belvieu_daily.rds")
+
+# Merge Oil & Derivates into one multivariate time series
+# Using na.approx method to fill missing values
+oil_and_derivates <- na.approx(cbind(diesel_ny_daily,
+      diesel_us_gulf_coast_daily,
+      diesel_us_la_daily,
+      gasoline_ny_daily,
+      gasoline_us_gulf_cost_daily,
+      gasoline_us_la_daily,
+      heating_oil_ny_daily,
+      henry_hub_natural_gas_daily,
+      kerosene_jet_fuel_daily,
+      oil_brent_daily,
+      oil_canada_monthly,
+      oil_fateh_monthly,
+      oil_opec_daily,
+      oil_wti_daily,
+      propane_mont_belvieu_daily))
+
+# Plot Oil & Derivates side by side
+plot.zoo(oil_and_derivates,
+         col=1:length(names(oil_and_derivates)),
+         main="Oil & Derivates")
