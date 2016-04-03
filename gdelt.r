@@ -3,10 +3,9 @@
 #
 
 # Packages Used
-# install.packages("GDELTtools")
 # install.packages("xts")
-require("GDELTtools")
 require("xts")
+source("gdelt_loader.r")
 
 # ##########################################################################
 # 1. Download GDELT data
@@ -17,66 +16,36 @@ require("xts")
 #      GetGDELT command will get the files directly from there and will not
 #      try to re-download them.
 #
-# Warning: The file 2014-03-19 is MISSING.
-# So when downloading never use a date interval containing that date.
+# Warning: The file 2014-03-19 is MISSING. [loader function takes care of this now]
+#          So when downloading never use a date interval containing that date.
 
-# Filter:
-# - Root Events Only: consider only headline of news article
-# - ActionGeo Countries: Iran, Iraq, Kuwait, Oman, Qatar, Saudi Arabia, Syria and United Arab Emirates
-# - Get all event codes for now. We will filter at a later stage
-# gdelt_filter <- list(
-#   IsRootEvent=1,
-#   ActionGeo_CountryCode=c("IR", "IQ", "KW", "OM", "QA", "SA", "SY", "AE"))
+if (!(file.exists("./data/gdelt_indicators.rds"))) {
+  # Filter:
+  # - Root Events Only: consider only headline of news article
+  # - ActionGeo Countries: Iran, Iraq, Kuwait, Oman, Qatar, Saudi Arabia, Syria and United Arab Emirates
+  # - Get all event codes for now. We will filter at a later stage
+  gdelt_filter <- list(
+    IsRootEvent=1,
+    ActionGeo_CountryCode=c("IR", "IQ", "KW", "OM", "QA", "SA", "SY", "AE"))
+  
+  # Download (or load zip if existent) yearly gdelt data, save to gdelt_{year}.rds and combine the result
+  # in the gdelt data frame
+  # Takes a very very very long time if you don't have the gdelt_{year}.rds files already
+  gdelt <- load_gdelt_year_auto(2000, 2016, gdelt_filter)
 
-# Download (or load zip if existent)
-# gdelt <- GetGDELT(
-#   start.date="2000-01-01",
-#   end.date="2000-12-31",
-#   filter=gdelt_filter,
-#   local.folder="./data/gdelt/")
-
-# Save pre-filtered GDELT database
-# saveRDS(gdelt, "gdelt_2000.rds")
-
-# Load pre-filtered GDELT database
-gdelt <- readRDS("./data/gdelt_2000.rds")
-
-# Add Date column for time series analysis
-gdelt$Date <- as.Date(as.character(gdelt$SQLDATE), format="%Y%m%d")
-
-# ##########################################################################
-# 2. Filter GDELT events
-# Remove duplicates
-# gdelt_nodups <- gdelt[!duplicated(gdelt[,c("DATEADDED", "ActionGeo_CountryCode", "EventCode", "SOURCEURL")]),]
-
-# Get only events with significant GoldsteinScale [-10.0,10.0]
-# gdelt_significant <- gdelt[abs(gdelt$GoldsteinScale) >= 8.0,]
-
-# Get only unconvencial violence events (mass killings, etc.)
-# And remove unused columns
-gdelt_filtered <- gdelt[
-  gdelt$EventRootCode==20,
-  c("Date", "EventCode", "GoldsteinScale", "NumMentions", "NumSources", "NumArticles", "AvgTone", "ActionGeo_CountryCode", "SOURCEURL")]
-
-# Aggregate events by date and count
-gdelt_summary.count <- aggregate(gdelt_filtered, by = list(gdelt_filtered$Date), length)
-gdelt_summary.mean <- aggregate(gdelt_filtered, by = list(gdelt_filtered$Date), mean, na.action = na.omit)
-
-# Merge all GDELT indicators into one variable
-gdelt_indicators <- cbind(
-  # Event Count
-  xts(gdelt_summary.count[,c("Date")],gdelt_summary.count[,1]),
-  # Event Means
-  xts(gdelt_summary.mean[,c("GoldsteinScale", "NumMentions", "NumArticles", "AvgTone")], gdelt_summary.mean[,1])
-)
-# Normalize Names
-names(gdelt_indicators) <- c("EventCount", "GoldsteinScale", "NumMentions", "NumArticles", "AvgTone")
-
-# Save GDELT working object
-saveRDS(gdelt_indicators, "./data/gdelt_indicators.rds")
-
+  # Save GDELT working object
+  saveRDS(gdelt, "./data/gdelt_indicators.rds")
+} else {
+  # Load GDELT working object
+  gdelt <- readRDS("./data/gdelt_indicators.rds")
+}
+  
 # Plot the GDELT indicators
-plot.zoo(gdelt_indicators, col=1:5,main="GDELT Indicators")
+plot.zoo(gdelt, col=1:5,main="GDELT Indicators")
+
+# Uncomment this line if you want to de-normalize the count data
+# due to the exponential increase in news global coverage over time
+# gdelt_daily_country <- readRDS("./data/gdelt_daily_counts_all_events_all_countries.rds")
 
 # ##########################################################################
 # 3. Load Oil and Derivates data
@@ -118,3 +87,4 @@ oil_and_derivates <- na.approx(cbind(diesel_ny_daily,
 plot.zoo(oil_and_derivates,
          col=1:length(names(oil_and_derivates)),
          main="Oil & Derivates")
+
