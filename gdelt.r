@@ -83,8 +83,10 @@ oil_and_derivates <- na.approx(cbind(diesel_ny_daily,
       oil_wti_daily,
       propane_mont_belvieu_daily))
 
+# Save merged Oil and Derivatives
+saveRDS(oil_and_derivates, "./data/oil_and_derivates.rds")
+
 # Plot Oil & Derivates side by side
 plot.zoo(oil_and_derivates,
          col=1:length(names(oil_and_derivates)),
          main="Oil & Derivates")
-
