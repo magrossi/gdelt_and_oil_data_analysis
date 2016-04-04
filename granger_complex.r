@@ -69,12 +69,12 @@ for (j in 2:ncol(oil_gdelt)) {
   for (i in 1:max_order) {
     res <- grangertest(g, o, order = i)$`Pr(>F)`[2]
     if (res < pval) {
-      cat(paste(colnames(o),"-> GDELT   Lag:",i,"Pr(>F):",res,"\n"))
+      cat(paste("GDELT ->", colnames(o)," Lag:",i,"Pr(>F):",res,"\n"))
     }
 
     res <- grangertest(o, g, order = i)$`Pr(>F)`[2]
     if (res < pval) {
-      cat(paste("GDELT ->", colnames(o)," Lag:",i,"Pr(>F):",res,"\n"))
+      cat(paste(colnames(o),"-> GDELT   Lag:",i,"Pr(>F):",res,"\n"))
     }
   }
 }
