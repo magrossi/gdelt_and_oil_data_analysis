@@ -2,6 +2,10 @@
 # CA683 - Assignment 2 - Granger Causality Analysis
 #
 
+# Testing for Granger-causality between GDELT Dummy Event series (0 on no event day and 1 in event day)
+# from the target Countries and Event Root Code = 20 (use of unconventional mass violence)
+# Against Oil & Derivatives Prices
+
 # Packages Used
 # install.packages("xts")
 # install.packages("forecast")
@@ -66,21 +70,21 @@ for (j in 2:ncol(oil_gdelt)) {
 # ##########################################################################
 # Results from p-0.01 and lags from 1 to 10
 # ##########################################################################
-# GDELT -> Gasoline.US.NY.Daily  Lag: 5 Pr(>F): 0.00849157917309497 
-# GDELT -> Oil.Brent.Daily  Lag: 9 Pr(>F): 0.00170437162976742 
-# GDELT -> Oil.Brent.Daily  Lag: 10 Pr(>F): 0.00227228278750451 
-# GDELT -> Oil.Canada.Monthly  Lag: 1 Pr(>F): 5.57554708412871e-07 
-# Oil.Canada.Monthly -> GDELT   Lag: 2 Pr(>F): 0.00641940976419122 
-# GDELT -> Oil.Canada.Monthly  Lag: 2 Pr(>F): 0.000142647979962646 
-# GDELT -> Oil.Canada.Monthly  Lag: 3 Pr(>F): 0.0036575144811257 
-# Oil.Fateh.Monthly -> GDELT   Lag: 1 Pr(>F): 0.005290820976944 
-# GDELT -> Oil.Fateh.Monthly  Lag: 1 Pr(>F): 0.00936325591856004 
-# GDELT -> Oil.WTI.Daily  Lag: 6 Pr(>F): 0.00793490123909961 
-# GDELT -> Oil.WTI.Daily  Lag: 9 Pr(>F): 0.00398762776270035 
-# GDELT -> Oil.WTI.Daily  Lag: 10 Pr(>F): 0.00718018580046149 
-# GDELT -> Propane.Mont.Belvieu.Daily  Lag: 7 Pr(>F): 0.00657227331876838 
-# GDELT -> Propane.Mont.Belvieu.Daily  Lag: 9 Pr(>F): 0.00117940830223101 
-# GDELT -> Propane.Mont.Belvieu.Daily  Lag: 10 Pr(>F): 0.000132265457902877 
+# Gasoline.US.NY.Daily -> GDELT   Lag: 5 Pr(>F): 0.00849157917309497 
+# Oil.Brent.Daily -> GDELT   Lag: 9 Pr(>F): 0.00170437162976742 
+# Oil.Brent.Daily -> GDELT   Lag: 10 Pr(>F): 0.00227228278750451 
+# Oil.Canada.Monthly -> GDELT   Lag: 1 Pr(>F): 5.57554708412871e-07 
+# GDELT -> Oil.Canada.Monthly  Lag: 2 Pr(>F): 0.00641940976419122 
+# Oil.Canada.Monthly -> GDELT   Lag: 2 Pr(>F): 0.000142647979962646 
+# Oil.Canada.Monthly -> GDELT   Lag: 3 Pr(>F): 0.0036575144811257 
+# GDELT -> Oil.Fateh.Monthly  Lag: 1 Pr(>F): 0.005290820976944 
+# Oil.Fateh.Monthly -> GDELT   Lag: 1 Pr(>F): 0.00936325591856004 
+# Oil.WTI.Daily -> GDELT   Lag: 6 Pr(>F): 0.00793490123909961 
+# Oil.WTI.Daily -> GDELT   Lag: 9 Pr(>F): 0.00398762776270035 
+# Oil.WTI.Daily -> GDELT   Lag: 10 Pr(>F): 0.00718018580046149 
+# Propane.Mont.Belvieu.Daily -> GDELT   Lag: 7 Pr(>F): 0.00657227331876838 
+# Propane.Mont.Belvieu.Daily -> GDELT   Lag: 9 Pr(>F): 0.00117940830223101 
+# Propane.Mont.Belvieu.Daily -> GDELT   Lag: 10 Pr(>F): 0.000132265457902877 
 # ##########################################################################
 
 # ##########################################################################

@@ -2,6 +2,9 @@
 # CA683 - Assignment 2 - Granger Causality Analysis
 #
 
+# Testing for Granger-causality between GDELT All Event Counts (normalized) from the target Countries
+# In Oil & Derivatives Prices
+
 # Packages Used
 # install.packages("xts")
 # install.packages("forecast")
@@ -83,30 +86,30 @@ for (j in 2:ncol(oil_gdelt)) {
 # ##########################################################################
 # Results from p-0.01 and lags from 1 to 10
 # ##########################################################################
-# Gasoline.US.NY.Daily -> GDELT   Lag: 4 Pr(>F): 0.000783229258605881 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 5 Pr(>F): 0.000428016443951224 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 6 Pr(>F): 0.000223348991602642 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 7 Pr(>F): 0.00063773448388498 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 8 Pr(>F): 0.000627619638613398 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 9 Pr(>F): 0.00102466492653061 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 10 Pr(>F): 0.00234230846313214 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 3 Pr(>F): 0.00321683212376121 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 4 Pr(>F): 0.000756213097918563 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 5 Pr(>F): 0.000291070144720741 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 6 Pr(>F): 0.000154679774680858 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 7 Pr(>F): 0.000436783690989877 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 8 Pr(>F): 0.000880523201176778 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 9 Pr(>F): 0.0011863577421909 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 10 Pr(>F): 0.00167589966854365 
-# Heating.Oil.US.NY.Daily -> GDELT   Lag: 4 Pr(>F): 0.00869143289285661 
-# Heating.Oil.US.NY.Daily -> GDELT   Lag: 6 Pr(>F): 0.00193271804672975 
-# Heating.Oil.US.NY.Daily -> GDELT   Lag: 7 Pr(>F): 0.00242657082615494 
-# Heating.Oil.US.NY.Daily -> GDELT   Lag: 8 Pr(>F): 0.00271212834078141 
-# Heating.Oil.US.NY.Daily -> GDELT   Lag: 9 Pr(>F): 0.000271638562834226 
-# Heating.Oil.US.NY.Daily -> GDELT   Lag: 10 Pr(>F): 0.000533280716153947 
-# Henry.Hub.Natural.Gas.Daily -> GDELT   Lag: 10 Pr(>F): 0.00571326103191461 
-# Kerosene.Jet.Fuel.Daily -> GDELT   Lag: 4 Pr(>F): 0.00439255292112465 
-# Kerosene.Jet.Fuel.Daily -> GDELT   Lag: 5 Pr(>F): 0.00924416916913057 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 4 Pr(>F): 0.000783229258605881 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 5 Pr(>F): 0.000428016443951224 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 6 Pr(>F): 0.000223348991602642 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 7 Pr(>F): 0.00063773448388498 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 8 Pr(>F): 0.000627619638613398 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 9 Pr(>F): 0.00102466492653061 
+# GDELT -> Gasoline.US.NY.Daily  Lag: 10 Pr(>F): 0.00234230846313214 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 3 Pr(>F): 0.00321683212376121 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 4 Pr(>F): 0.000756213097918563 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 5 Pr(>F): 0.000291070144720741 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 6 Pr(>F): 0.000154679774680858 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 7 Pr(>F): 0.000436783690989877 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 8 Pr(>F): 0.000880523201176778 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 9 Pr(>F): 0.0011863577421909 
+# GDELT -> Gasoline.US.Gulf.Coast.Daily  Lag: 10 Pr(>F): 0.00167589966854365 
+# GDELT -> Heating.Oil.US.NY.Daily  Lag: 4 Pr(>F): 0.00869143289285661 
+# GDELT -> Heating.Oil.US.NY.Daily  Lag: 6 Pr(>F): 0.00193271804672975 
+# GDELT -> Heating.Oil.US.NY.Daily  Lag: 7 Pr(>F): 0.00242657082615494 
+# GDELT -> Heating.Oil.US.NY.Daily  Lag: 8 Pr(>F): 0.00271212834078141 
+# GDELT -> Heating.Oil.US.NY.Daily  Lag: 9 Pr(>F): 0.000271638562834226 
+# GDELT -> Heating.Oil.US.NY.Daily  Lag: 10 Pr(>F): 0.000533280716153947 
+# GDELT -> Henry.Hub.Natural.Gas.Daily  Lag: 10 Pr(>F): 0.00571326103191461 
+# GDELT -> Kerosene.Jet.Fuel.Daily  Lag: 4 Pr(>F): 0.00439255292112465 
+# GDELT -> Kerosene.Jet.Fuel.Daily  Lag: 5 Pr(>F): 0.00924416916913057 
 # ##########################################################################
 
 # ##########################################################################
