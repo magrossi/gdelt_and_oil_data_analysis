@@ -51,14 +51,16 @@ for (j in 2:ncol(oil_gdelt)) {
   g <- m[,1]
   o <- m[,2]
   for (i in 1:max_order) {
-    res <- grangertest(g, o, order = i)$`Pr(>F)`[2]
+    gt <- grangertest(g, o, order = i)
+    res <- gt$`Pr(>F)`[2]
     if (res < pval) {
-      cat(paste("GDELT ->", colnames(o)," Lag:",i,"Pr(>F):",res,"\n"))
+      cat(paste("GDELT ->", colnames(o),"F:",gt$F[2]," Pr(>F):",res," Lag:",i,"\n"))
     }
     
-    res <- grangertest(o, g, order = i)$`Pr(>F)`[2]
+    gt <- grangertest(o, g, order = i)
+    res <- gt$`Pr(>F)`[2]
     if (res < pval) {
-      cat(paste(colnames(o),"-> GDELT   Lag:",i,"Pr(>F):",res,"\n"))
+      cat(paste(colnames(o),"-> GDELT   F:",gt$F[2]," Pr(>F):",res," Lag:",i,"\n"))
     }
   }
 }
@@ -66,21 +68,21 @@ for (j in 2:ncol(oil_gdelt)) {
 # ##########################################################################
 # Results from p-0.01 and lags from 1 to 10
 # ##########################################################################
-# GDELT -> Gasoline.US.NY.Daily  Lag: 5 Pr(>F): 0.00849157917309497 
-# GDELT -> Oil.Brent.Daily  Lag: 9 Pr(>F): 0.00170437162976742 
-# GDELT -> Oil.Brent.Daily  Lag: 10 Pr(>F): 0.00227228278750451 
-# GDELT -> Oil.Canada.Monthly  Lag: 1 Pr(>F): 5.57554708412871e-07 
-# Oil.Canada.Monthly -> GDELT   Lag: 2 Pr(>F): 0.00641940976419122 
-# GDELT -> Oil.Canada.Monthly  Lag: 2 Pr(>F): 0.000142647979962646 
-# GDELT -> Oil.Canada.Monthly  Lag: 3 Pr(>F): 0.0036575144811257 
-# Oil.Fateh.Monthly -> GDELT   Lag: 1 Pr(>F): 0.005290820976944 
-# GDELT -> Oil.Fateh.Monthly  Lag: 1 Pr(>F): 0.00936325591856004 
-# GDELT -> Oil.WTI.Daily  Lag: 6 Pr(>F): 0.00793490123909961 
-# GDELT -> Oil.WTI.Daily  Lag: 9 Pr(>F): 0.00398762776270035 
-# GDELT -> Oil.WTI.Daily  Lag: 10 Pr(>F): 0.00718018580046149 
-# GDELT -> Propane.Mont.Belvieu.Daily  Lag: 7 Pr(>F): 0.00657227331876838 
-# GDELT -> Propane.Mont.Belvieu.Daily  Lag: 9 Pr(>F): 0.00117940830223101 
-# GDELT -> Propane.Mont.Belvieu.Daily  Lag: 10 Pr(>F): 0.000132265457902877 
+# Gasoline.US.NY.Daily -> GDELT   F: 3.09877392999219  Pr(>F): 0.00849157917309497  Lag: 5 
+# Oil.Brent.Daily -> GDELT   F: 2.94600323208041  Pr(>F): 0.00170437162976742  Lag: 9 
+# Oil.Brent.Daily -> GDELT   F: 2.74088483536638  Pr(>F): 0.00227228278750451  Lag: 10 
+# Oil.Canada.Monthly -> GDELT   F: 25.2393463209426  Pr(>F): 5.57554708412871e-07  Lag: 1 
+# GDELT -> Oil.Canada.Monthly F: 5.0629049150379  Pr(>F): 0.00641940976419122  Lag: 2 
+# Oil.Canada.Monthly -> GDELT   F: 8.89973178492887  Pr(>F): 0.000142647979962646  Lag: 2 
+# Oil.Canada.Monthly -> GDELT   F: 4.51867609245534  Pr(>F): 0.0036575144811257  Lag: 3 
+# GDELT -> Oil.Fateh.Monthly F: 7.78153753640789  Pr(>F): 0.005290820976944  Lag: 1 
+# Oil.Fateh.Monthly -> GDELT   F: 6.75547826028844  Pr(>F): 0.00936325591856004  Lag: 1 
+# Oil.WTI.Daily -> GDELT   F: 2.90169333045059  Pr(>F): 0.00793490123909961  Lag: 6 
+# Oil.WTI.Daily -> GDELT   F: 2.69246507167141  Pr(>F): 0.00398762776270035  Lag: 9 
+# Oil.WTI.Daily -> GDELT   F: 2.41874561730178  Pr(>F): 0.00718018580046149  Lag: 10 
+# Propane.Mont.Belvieu.Daily -> GDELT   F: 2.7992936106301  Pr(>F): 0.00657227331876838  Lag: 7 
+# Propane.Mont.Belvieu.Daily -> GDELT   F: 3.05469478596116  Pr(>F): 0.00117940830223101  Lag: 9 
+# Propane.Mont.Belvieu.Daily -> GDELT   F: 3.49292022657247  Pr(>F): 0.000132265457902877  Lag: 10 
 # ##########################################################################
 
 # ##########################################################################

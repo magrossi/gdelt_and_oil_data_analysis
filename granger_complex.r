@@ -67,14 +67,16 @@ for (j in 2:ncol(oil_gdelt)) {
   g <- m[,1]
   o <- m[,2]
   for (i in 1:max_order) {
-    res <- grangertest(g, o, order = i)$`Pr(>F)`[2]
+    gt <- grangertest(g, o, order = i)
+    res <- gt$`Pr(>F)`[2]
     if (res < pval) {
-      cat(paste("GDELT ->", colnames(o)," Lag:",i,"Pr(>F):",res,"\n"))
+      cat(paste("GDELT ->", colnames(o),"F:",gt$F[2]," Pr(>F):",res," Lag:",i,"\n"))
     }
-
-    res <- grangertest(o, g, order = i)$`Pr(>F)`[2]
+    
+    gt <- grangertest(o, g, order = i)
+    res <- gt$`Pr(>F)`[2]
     if (res < pval) {
-      cat(paste(colnames(o),"-> GDELT   Lag:",i,"Pr(>F):",res,"\n"))
+      cat(paste(colnames(o),"-> GDELT   F:",gt$F[2]," Pr(>F):",res," Lag:",i,"\n"))
     }
   }
 }
@@ -82,36 +84,46 @@ for (j in 2:ncol(oil_gdelt)) {
 # ##########################################################################
 # Results from p-0.01 and lags from 1 to 10
 # ##########################################################################
-# Gasoline.US.NY.Daily -> GDELT   Lag: 4 Pr(>F): 0.00588372863050341 
-# Gasoline.US.NY.Daily -> GDELT   Lag: 7 Pr(>F): 0.00734249422412508 
-# Gasoline.US.Gulf.Coast.Daily -> GDELT   Lag: 2 Pr(>F): 0.00501948275073459 
-# Gasoline.US.LA.Daily -> GDELT   Lag: 10 Pr(>F): 0.00916178317231255 
-# Oil.Brent.Daily -> GDELT   Lag: 2 Pr(>F): 0.00215790951308497 
-# Oil.Brent.Daily -> GDELT   Lag: 3 Pr(>F): 0.00625657395413117 
-# Oil.Brent.Daily -> GDELT   Lag: 5 Pr(>F): 0.00662115204892865 
-# Oil.Brent.Daily -> GDELT   Lag: 6 Pr(>F): 0.00278162676534521 
-# Oil.Brent.Daily -> GDELT   Lag: 7 Pr(>F): 0.00343808022987204 
-# Oil.Brent.Daily -> GDELT   Lag: 8 Pr(>F): 0.00268963693405747 
-# Oil.Brent.Daily -> GDELT   Lag: 9 Pr(>F): 0.00496169757629982 
-# Oil.Brent.Daily -> GDELT   Lag: 10 Pr(>F): 0.00236610743799424 
-# GDELT -> Oil.Canada.Monthly  Lag: 1 Pr(>F): 0.00334385135606773 
-# Oil.Fateh.Monthly -> GDELT   Lag: 1 Pr(>F): 0.00436747574905057 
-# GDELT -> Oil.Fateh.Monthly  Lag: 1 Pr(>F): 0.000863347979109852 
-# GDELT -> Oil.Fateh.Monthly  Lag: 2 Pr(>F): 0.00704429555010789 
-# Oil.OPEC.Daily -> GDELT   Lag: 2 Pr(>F): 0.00721852045013533 
-# Oil.WTI.Daily -> GDELT   Lag: 2 Pr(>F): 0.000954292301946692 
-# Oil.WTI.Daily -> GDELT   Lag: 3 Pr(>F): 0.00249427189735466 
-# Oil.WTI.Daily -> GDELT   Lag: 4 Pr(>F): 0.00567801549630374 
-# Oil.WTI.Daily -> GDELT   Lag: 5 Pr(>F): 0.00321169096799687 
-# GDELT -> Oil.WTI.Daily  Lag: 5 Pr(>F): 0.00466729124235263 
-# Oil.WTI.Daily -> GDELT   Lag: 6 Pr(>F): 0.00189845774166305 
-# GDELT -> Oil.WTI.Daily  Lag: 6 Pr(>F): 0.00853579103548047 
-# Oil.WTI.Daily -> GDELT   Lag: 7 Pr(>F): 0.00148983558882053 
-# Oil.WTI.Daily -> GDELT   Lag: 8 Pr(>F): 0.00286038266445096 
-# Oil.WTI.Daily -> GDELT   Lag: 9 Pr(>F): 0.00448921148624171 
-# GDELT -> Oil.WTI.Daily  Lag: 9 Pr(>F): 0.00478376324529098 
-# Oil.WTI.Daily -> GDELT   Lag: 10 Pr(>F): 0.00755533316119919 
-# GDELT -> Oil.WTI.Daily  Lag: 10 Pr(>F): 0.00808558750604931 
+# Diesel.US.LA.Daily -> GDELT   F: 7.83565603362815  Pr(>F): 0.00514135449661481  Lag: 1 
+# GDELT -> Diesel.US.LA.Daily F: 2.71555877167641  Pr(>F): 0.00823951926676257  Lag: 7 
+# Gasoline.US.NY.Daily -> GDELT   F: 3.29466460149885  Pr(>F): 0.00564856199650821  Lag: 5 
+# Gasoline.US.NY.Daily -> GDELT   F: 3.08124695284181  Pr(>F): 0.00515834073170076  Lag: 6 
+# Gasoline.US.NY.Daily -> GDELT   F: 2.64358152748014  Pr(>F): 0.00994801884716731  Lag: 7 
+# Gasoline.US.NY.Daily -> GDELT   F: 2.50323119509772  Pr(>F): 0.00740479818154645  Lag: 9 
+# GDELT -> Gasoline.US.LA.Daily F: 3.06357345924969  Pr(>F): 0.00116041475095885  Lag: 9 
+# GDELT -> Gasoline.US.LA.Daily F: 3.45279609023268  Pr(>F): 0.000158343453785841  Lag: 10 
+# Heating.Oil.US.NY.Daily -> GDELT   F: 8.72367290550385  Pr(>F): 0.00315042621444897  Lag: 1 
+# Heating.Oil.US.NY.Daily -> GDELT   F: 3.07990695925904  Pr(>F): 0.00882957503392254  Lag: 5 
+# GDELT -> Heating.Oil.US.NY.Daily F: 3.19120169934182  Pr(>F): 0.00224264233659656  Lag: 7 
+# GDELT -> Heating.Oil.US.NY.Daily F: 2.80100508269746  Pr(>F): 0.00425132502545885  Lag: 8 
+# GDELT -> Heating.Oil.US.NY.Daily F: 2.5701397395748  Pr(>F): 0.00595977867188916  Lag: 9 
+# Heating.Oil.US.NY.Daily -> GDELT   F: 2.54342095762186  Pr(>F): 0.00650100542730044  Lag: 9 
+# GDELT -> Oil.Brent.Daily F: 10.060070703421  Pr(>F): 0.00152124188594869  Lag: 1 
+# Oil.Brent.Daily -> GDELT   F: 9.97784888750537  Pr(>F): 0.00159059626913838  Lag: 1 
+# GDELT -> Oil.Brent.Daily F: 5.12098984958582  Pr(>F): 0.00599087559643419  Lag: 2 
+# GDELT -> Oil.Brent.Daily F: 5.10451302625254  Pr(>F): 0.00157814407370973  Lag: 3 
+# GDELT -> Oil.Brent.Daily F: 3.82998346856181  Pr(>F): 0.00410610708761312  Lag: 4 
+# GDELT -> Oil.Brent.Daily F: 5.0414841155414  Pr(>F): 0.00012916604657337  Lag: 5 
+# GDELT -> Oil.Brent.Daily F: 4.96097419798752  Pr(>F): 4.45263681360242e-05  Lag: 6 
+# GDELT -> Oil.Brent.Daily F: 4.19592111886149  Pr(>F): 0.000126264769190623  Lag: 7 
+# GDELT -> Oil.Brent.Daily F: 3.79780510987627  Pr(>F): 0.000184528463219038  Lag: 8 
+# GDELT -> Oil.Brent.Daily F: 3.43783359852373  Pr(>F): 0.000308998290055237  Lag: 9 
+# GDELT -> Oil.Brent.Daily F: 3.14018942207664  Pr(>F): 0.00051287592824948  Lag: 10 
+# GDELT -> Oil.Fateh.Monthly F: 11.1036246111649  Pr(>F): 0.000865514951312661  Lag: 1 
+# Oil.Fateh.Monthly -> GDELT   F: 12.7085262040721  Pr(>F): 0.000366124090434988  Lag: 1 
+# GDELT -> Oil.Fateh.Monthly F: 4.8906782644521  Pr(>F): 0.00753890946326704  Lag: 2 
+# Oil.Fateh.Monthly -> GDELT   F: 5.50154703341455  Pr(>F): 0.00409597486827836  Lag: 2 
+# Oil.WTI.Daily -> GDELT   F: 10.0028589152271  Pr(>F): 0.00156889151336203  Lag: 1 
+# GDELT -> Oil.WTI.Daily F: 6.16568541517175  Pr(>F): 1.03795835298342e-05  Lag: 5 
+# Oil.WTI.Daily -> GDELT   F: 3.30013588293852  Pr(>F): 0.00558382578834927  Lag: 5 
+# GDELT -> Oil.WTI.Daily F: 7.18994215404166  Pr(>F): 1.14903202944918e-07  Lag: 6 
+# Oil.WTI.Daily -> GDELT   F: 2.81790673068599  Pr(>F): 0.00968224645947826  Lag: 6 
+# GDELT -> Oil.WTI.Daily F: 6.55522162802091  Pr(>F): 9.69923929515621e-08  Lag: 7 
+# GDELT -> Oil.WTI.Daily F: 5.77914988396263  Pr(>F): 2.25965040775542e-07  Lag: 8 
+# GDELT -> Oil.WTI.Daily F: 5.24545732911826  Pr(>F): 3.77747237143026e-07  Lag: 9 
+# Oil.WTI.Daily -> GDELT   F: 2.82037851678129  Pr(>F): 0.00260369992247111  Lag: 9 
+# GDELT -> Oil.WTI.Daily F: 4.72296864607214  Pr(>F): 9.00800229287868e-07  Lag: 10 
+# Oil.WTI.Daily -> GDELT   F: 2.46046203622519  Pr(>F): 0.0062038521915368  Lag: 10 
 # ##########################################################################
 
 # ##########################################################################
@@ -134,35 +146,45 @@ print(res)
 # ###########################################################################
 # Results from p-0.01 and lags from 1 to 10
 # ###########################################################################                                       F-statistic      p-value lag
-#                                       F-statistic      p-value lag
-# GDELT -> Gasoline.US.NY.Daily            3.625504 0.0058837286   4
-# GDELT -> Gasoline.US.NY.Daily            2.757399 0.0073424942   7
-# GDELT -> Gasoline.US.Gulf.Coast.Daily    5.298027 0.0050194828   2
-# GDELT -> Gasoline.US.LA.Daily            2.351609 0.0091617832  10
-# GDELT -> Oil.Brent.Daily                 6.143612 0.0021579095   2
-# GDELT -> Oil.Brent.Daily                 4.121935 0.0062565740   3
-# GDELT -> Oil.Brent.Daily                 3.218661 0.0066211520   5
-# GDELT -> Oil.Brent.Daily                 3.335078 0.0027816268   6
-# GDELT -> Oil.Brent.Daily                 3.036779 0.0034380802   7
-# GDELT -> Oil.Brent.Daily                 2.951496 0.0026896369   8
-# GDELT -> Oil.Brent.Daily                 2.626273 0.0049616976   9
-# GDELT -> Oil.Brent.Daily                 2.729786 0.0023661074  10
-# Oil.Canada.Monthly -> GDELT              8.633114 0.0033438514   1
-# Oil.Fateh.Monthly -> GDELT              11.108280 0.0008633480   1
-# GDELT -> Oil.Fateh.Monthly               8.128999 0.0043674757   1
-# Oil.Fateh.Monthly -> GDELT               4.958622 0.0070442956   2
-# GDELT -> Oil.OPEC.Daily                  4.938113 0.0072185205   2
-# GDELT -> Oil.WTI.Daily                   6.960668 0.0009542923   2
-# GDELT -> Oil.WTI.Daily                   4.779111 0.0024942719   3
-# GDELT -> Oil.WTI.Daily                   3.645744 0.0056780155   4
-# Oil.WTI.Daily -> GDELT                   3.385635 0.0046672912   5
-# GDELT -> Oil.WTI.Daily                   3.562768 0.0032116910   5
-# Oil.WTI.Daily -> GDELT                   2.871026 0.0085357910   6
-# GDELT -> Oil.WTI.Daily                   3.489956 0.0018984577   6
-# GDELT -> Oil.WTI.Daily                   3.337495 0.0014898356   7
-# GDELT -> Oil.WTI.Daily                   2.931249 0.0028603827   8
-# Oil.WTI.Daily -> GDELT                   2.637263 0.0047837632   9
-# GDELT -> Oil.WTI.Daily                   2.656577 0.0044892115   9
-# Oil.WTI.Daily -> GDELT                   2.384650 0.0080855875  10
-# GDELT -> Oil.WTI.Daily                   2.404146 0.0075553332  10
+#                                  F-statistic      p-value lag
+# Diesel.US.LA.Daily -> GDELT         7.835656 5.141354e-03   1
+# GDELT -> Diesel.US.LA.Daily         2.715559 8.239519e-03   7
+# Gasoline.US.NY.Daily -> GDELT       3.294665 5.648562e-03   5
+# Gasoline.US.NY.Daily -> GDELT       3.081247 5.158341e-03   6
+# Gasoline.US.NY.Daily -> GDELT       2.643582 9.948019e-03   7
+# Gasoline.US.NY.Daily -> GDELT       2.503231 7.404798e-03   9
+# GDELT -> Gasoline.US.LA.Daily       3.063573 1.160415e-03   9
+# GDELT -> Gasoline.US.LA.Daily       3.452796 1.583435e-04  10
+# Heating.Oil.US.NY.Daily -> GDELT    8.723673 3.150426e-03   1
+# Heating.Oil.US.NY.Daily -> GDELT    3.079907 8.829575e-03   5
+# GDELT -> Heating.Oil.US.NY.Daily    3.191202 2.242642e-03   7
+# GDELT -> Heating.Oil.US.NY.Daily    2.801005 4.251325e-03   8
+# Heating.Oil.US.NY.Daily -> GDELT    2.543421 6.501005e-03   9
+# GDELT -> Heating.Oil.US.NY.Daily    2.570140 5.959779e-03   9
+# Oil.Brent.Daily -> GDELT            9.977849 1.590596e-03   1
+# GDELT -> Oil.Brent.Daily           10.060071 1.521242e-03   1
+# GDELT -> Oil.Brent.Daily            5.120990 5.990876e-03   2
+# GDELT -> Oil.Brent.Daily            5.104513 1.578144e-03   3
+# GDELT -> Oil.Brent.Daily            3.829983 4.106107e-03   4
+# GDELT -> Oil.Brent.Daily            5.041484 1.291660e-04   5
+# GDELT -> Oil.Brent.Daily            4.960974 4.452637e-05   6
+# GDELT -> Oil.Brent.Daily            4.195921 1.262648e-04   7
+# GDELT -> Oil.Brent.Daily            3.797805 1.845285e-04   8
+# GDELT -> Oil.Brent.Daily            3.437834 3.089983e-04   9
+# GDELT -> Oil.Brent.Daily            3.140189 5.128759e-04  10
+# Oil.Fateh.Monthly -> GDELT         12.708526 3.661241e-04   1
+# GDELT -> Oil.Fateh.Monthly         11.103625 8.655150e-04   1
+# Oil.Fateh.Monthly -> GDELT          5.501547 4.095975e-03   2
+# GDELT -> Oil.Fateh.Monthly          4.890678 7.538909e-03   2
+# Oil.WTI.Daily -> GDELT             10.002859 1.568892e-03   1
+# Oil.WTI.Daily -> GDELT              3.300136 5.583826e-03   5
+# GDELT -> Oil.WTI.Daily              6.165685 1.037958e-05   5
+# Oil.WTI.Daily -> GDELT              2.817907 9.682246e-03   6
+# GDELT -> Oil.WTI.Daily              7.189942 1.149032e-07   6
+# GDELT -> Oil.WTI.Daily              6.555222 9.699239e-08   7
+# GDELT -> Oil.WTI.Daily              5.779150 2.259650e-07   8
+# Oil.WTI.Daily -> GDELT              2.820379 2.603700e-03   9
+# GDELT -> Oil.WTI.Daily              5.245457 3.777472e-07   9
+# Oil.WTI.Daily -> GDELT              2.460462 6.203852e-03  10
+# GDELT -> Oil.WTI.Daily              4.722969 9.008002e-07  10
 # ##########################################################################
