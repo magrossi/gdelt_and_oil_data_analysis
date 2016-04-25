@@ -2,6 +2,9 @@
 # CA683 - Assignment 2 - Granger Causality Analysis
 #
 
+# Testing for Granger-causality between GDELT All Event Counts (normalized) from the target Countries
+# In Oil & Derivatives Prices
+
 # Packages Used
 # install.packages("xts")
 # install.packages("forecast")

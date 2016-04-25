@@ -2,6 +2,10 @@
 # CA683 - Assignment 2 - Granger Causality Analysis
 #
 
+# Testing for Granger-causality between GDELT Normalized Weighted Event Counts from the target Countries
+# In Oil & Derivatives Prices
+# The event counts are weighted by Number Of Mentions what creates the calculated "GDELT Index" figure
+
 # Packages Used
 # install.packages("xts")
 # install.packages("forecast")

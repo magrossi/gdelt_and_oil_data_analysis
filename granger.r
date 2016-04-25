@@ -2,6 +2,10 @@
 # CA683 - Assignment 2 - Granger Causality Analysis
 #
 
+# Testing for Granger-causality between GDELT Dummy Event series (0 on no event day and 1 in event day)
+# from the target Countries and Event Root Code = 20 (use of unconventional mass violence)
+# Against Oil & Derivatives Prices
+
 # Packages Used
 # install.packages("xts")
 # install.packages("forecast")
