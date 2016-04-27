@@ -14,8 +14,8 @@ Oil & Derivates
 * Henry Hub Natural Gas - Daily
 * Kerosene Jet Fuel - Daily
 * Oil Brent - Daily
-* Oil Canada - Daily
-* Oil Fateh - Daily
+* Oil Canada - Monthly
+* Oil Fateh - Monthly
 * Oil OPEC - Daily
 * Oil WTI - Daily
 * Propane Mont Belvieu - Daily
